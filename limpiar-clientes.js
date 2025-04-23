@@ -15,13 +15,13 @@ const CLIENTES_COLLECTION = 'clientes';
     const soda = connection.getSodaDatabase();
     const collection = await soda.openCollection(CLIENTES_COLLECTION);
 
-    // 🚫 Eliminar documentos con assignmentMethod SIN intentar leerlos
+    // ✅ Eliminar sin intentar leer contenido (evita ORA-40842)
     const result = await collection.find()
       .filter({ assignmentMethod: { "$exists": true } })
       .remove();
 
     console.log(`🧹 Documentos eliminados: ${result.count}`);
-    
+
     await connection.close();
     await oracledb.getPool().close();
     console.log('✔️ Limpieza completada.');
